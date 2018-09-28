@@ -1,0 +1,100 @@
+﻿@model IoTVirtualClient.Models.InformationModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Styles.Render("~/Content/bootstrap.css")
+@Styles.Render("~/Content/site.css")
+@Styles.Render("~/Content/fontawesome.css")
+@Styles.Render("~/Content/fontawesome.min.css")
+@Styles.Render("~/Content/all.min.css")
+@Styles.Render("~/Content/all.css")
+
+
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <style>
+        .off {
+            color: red;
+        }
+
+        .on {
+            color: green
+        }
+
+        .jumboStyle {
+            padding-bottom: 172px;
+            padding-left: 339px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid vertical-center jumboStyle">
+        <div>
+            <div id="button1" class="col-md-6">
+                <button id="btnOn" type="submit" class="btn center-block" style="background: #e9ecef"><i class="fas fa-power-off fa-7x glyphicon-text-background on"></i></button>
+            </div>
+            <div id="button2" class="col-md-6">
+                <button id="btnOff" type="submit" class="btn center-block" style="background: #e9ecef"><i class="fas fa-power-off fa-7x glyphicon-text-background off"></i></button>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#button1").hide();
+            $("#btnOn").click(function () {
+                var status = "On";
+                $.ajax(
+                    {
+                        type: "POST", //HTTP POST Method
+                        url: "/Home/GetSignalInformation", // Controller/View
+                        dataType: "json",
+                        data: { //Passing data
+                            Status: status,//Reading text box values using Jquery
+                        },
+                        success: function (response) {
+                            console.log(response.success);
+                            if (response.success) {
+                                $("#button1").hide();
+                                $("#button2").show();
+                            } else {
+                                alert("Error occured");
+                                console.log(response);
+
+                            }
+                        }
+                    });
+            });
+
+            $("#btnOff").click(function () {
+                var status = "Off";
+                $.ajax(
+                    {
+                        type: "POST", //HTTP POST Method
+                        url: "/Home/GetSignalInformation", // Controller/View
+                        dataType: "json",
+                        data: { //Passing data
+                            Status: status, //Reading text box values using Jquery
+                        },
+                        success: function (response) {
+                            console.log(response.success);
+                            if (response.success) {
+                                $("#button2").hide();
+                                $("#button1").show();
+                            } else {
+                                alert("Error occured");
+                                console.log(response);
+
+                            }
+                        }
+                    });
+            });
+        });
+    </script>
+}
+
